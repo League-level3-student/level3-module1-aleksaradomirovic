@@ -21,21 +21,25 @@ public class _03_TestMatchingBrackets {
 	private boolean doBracketsMatch(String b) {
 		boolean[] used = new boolean[b.length()];
 
-		int open = 0, close = 0;
-
 		for (int i = 0; i < b.length(); i++) {
 			char x = b.charAt(i);
 			if (x == '{') {
-				open++;
-			} else if (x == '}') {
-				close++;
+				if (!findCloseBracketInStack(i, used, b)) {
+					return false;
+				}
 			}
 		}
 
-		if (open == close) {
-			return true;
-		}
+		return true;
+	}
 
+	boolean findCloseBracketInStack(int open, boolean[] used, String b) {
+		for (int i = open; i < used.length; i++) {
+			if (b.charAt(i) == '}' && !used[i]) {
+				used[i] = true;
+				return true;
+			}
+		}
 		return false;
 	}
 }
