@@ -1,11 +1,13 @@
 package _04_HangMan;
 
+import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 public class HangMan implements KeyListener {
@@ -13,6 +15,8 @@ public class HangMan implements KeyListener {
 	JPanel panel = new JPanel();
 	JLabel label = new JLabel();
 	JLabel label2 = new JLabel();
+	JLabel lives = new JLabel();
+	int livesCount = 10;
 	String displayString, actualWord, letterList;
 	ArrayList<Character> guessedLetters = new ArrayList<Character>();
 
@@ -29,6 +33,7 @@ public class HangMan implements KeyListener {
 				}
 			}
 		}
+		
 		displayString = "";
 		for (int i = 0; i < r.length; i++) {
 			displayString += r[i];
@@ -47,7 +52,13 @@ public class HangMan implements KeyListener {
 
 		label.setText(displayString);
 		label2.setText(letterList);
+		livesCount = 10 - letterList.length();
+		lives.setText(livesCount+"");
 		frame.pack();
+		if(livesCount < 1) {
+			JOptionPane.showMessageDialog(null, "I gave you 10 lives; improve your conventional logic skills. It was "+actualWord+" by the way.");
+			System.exit(0);
+		}
 	}
 
 	void newWord() {
@@ -61,6 +72,7 @@ public class HangMan implements KeyListener {
 		frame.add(panel);
 		panel.add(label);
 		panel.add(label2);
+		panel.add(lives);
 		frame.addKeyListener(this);
 		label.setText(displayString);
 	}
@@ -68,6 +80,8 @@ public class HangMan implements KeyListener {
 	void start() {
 		frame.pack();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		label2.setForeground(Color.RED);
+		lives.setForeground(Color.BLUE);
 		frame.setVisible(true);
 		newWord();
 	}
@@ -84,6 +98,11 @@ public class HangMan implements KeyListener {
 		}
 
 		reloadDisplay();
+		
+		if(!displayString.contains("_")) {
+			JOptionPane.showMessageDialog(null, "Yay! You're slightly intelligent!");
+			System.exit(0);
+		}
 	}
 
 	@Override
